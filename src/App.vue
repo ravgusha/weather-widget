@@ -1,7 +1,15 @@
-<template><div>Weather</div></template>
+<template>
+  <div>Weather widget</div>
+  <card-list />
+</template>
 
 <script lang="ts">
-export default { name: "App" };
+import CardList from "./components/CardList.vue";
+export default {
+  components: {
+    CardList,
+  },
+};
 </script>
 
 <style></style>
