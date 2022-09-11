@@ -1,0 +1,48 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+  background-image: url(@/assets/day.webp);
+  border-radius: 7%;
+  margin-bottom: 25px;
+
+  &__main {
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-transform: capitalize;
+  }
+
+  &__other {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding-top: 15px;
+
+    div {
+      display: flex;
+      padding-bottom: 5px;
+      // margin-right: 75px;
+
+      img {
+        width: 25px;
+        height: 25px;
+        margin-right: 10px;
+        // filter: invert(100%);
+      }
+
+      &:last-of-type {
+        justify-self: center;
+      }
+    }
+  }
+}
