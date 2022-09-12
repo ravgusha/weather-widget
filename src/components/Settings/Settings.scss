@@ -1,0 +1,17 @@
+.dropdown {
+  position: absolute;
+  height: 0px;
+  width: 100%;
+  background-color: #ec6e4c;
+  transition: height 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.dropdown-after {
+  height: 100%;
+  padding-top: 43px;
+  transition: height 0.2s ease;
+}

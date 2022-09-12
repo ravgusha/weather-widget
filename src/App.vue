@@ -1,13 +1,14 @@
 <template>
-  <div>Weather widget</div>
-  <card-list :cards="cards" />
+  <div class="container"><Header /> <card-list :cards="cards" /></div>
 </template>
 
 <script lang="ts">
-import CardList from "@/src/components/CardList/CardList.vue";
+import CardList from "./components/CardList/CardList.vue";
+import Header from "./components/Header/Header.vue";
 export default {
   components: {
     CardList,
+    Header,
   },
   data() {
     return {

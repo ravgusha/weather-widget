@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import CardItem from "@/src/components/CardItem/CardItem.vue";
+import CardItem from "../CardItem/CardItem.vue";
 export default {
   components: { CardItem },
   props: {
