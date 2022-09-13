@@ -2,7 +2,7 @@
   <div class="header">
     <button type="button" @click="isOpen = !isOpen" />
   </div>
-  <settings :isOpen="isOpen" />
+  <settings :locations="locations" :isOpen="isOpen" />
   <!-- <div class="dropdown" :class="{ 'dropdown-after': isOpen }">Settings</div> -->
 </template>
 <script lang="ts">
@@ -10,6 +10,11 @@ import Settings from "../Settings/Settings.vue";
 export default {
   components: {
     Settings,
+  },
+  props: {
+    locations: {
+      type: Array,
+    },
   },
   data: () => {
     return {

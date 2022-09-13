@@ -1,5 +1,7 @@
 <template>
-  <div class="container"><Header /> <card-list :cards="cards" /></div>
+  <div class="container">
+    <Header :locations="locations" /> <card-list :cards="cards" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -12,6 +14,7 @@ export default {
   },
   data() {
     return {
+      locations: [],
       cards: [
         {
           coord: {
@@ -113,6 +116,14 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    addLocation() {
+      if (this.newLocation) {
+        this.locations?.push(this.newLocation);
+        this.newLocation = "";
+      }
+    },
   },
 };
 </script>
