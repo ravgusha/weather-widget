@@ -1,5 +1,5 @@
 <template>
-  <div class="dropdown" :class="{ 'dropdown-after': isOpen }">
+  <div class="dropdown" :class="{ 'dropdown-after': isSettingsOpen }">
     <p></p>
     <form @submit.prevent>
       <input type="text" placeholder="Add new location" v-model="newLocation" />
@@ -8,33 +8,32 @@
   </div>
 </template>
 <script lang="ts">
-interface newLocation {
-  newLocation: string;
-}
+import { defineComponent, PropType } from "vue";
 
-export default {
+export default defineComponent({
   data() {
     return {
       newLocation: "",
-    } as ne;
+    };
   },
   props: {
-    isOpen: {
+    isSettingsOpen: {
       type: Boolean,
     },
     locations: {
-      type: Array,
+      type: Array as PropType<string[]>,
     },
   },
   methods: {
-    // addLocation() {
-    //   if (this.newLocation) {
-    //     this.locations.push(this.newLocation);
-    //     this.newLocation = "";
-    //   }
-    // },
+    addLocation() {
+      console.log(location);
+      if (this.newLocation) {
+        this.$emit("add", this.newLocation);
+        this.newLocation = "";
+      }
+    },
   },
-};
+});
 </script>
 <style lang="scss">
 @import "./Settings.scss";

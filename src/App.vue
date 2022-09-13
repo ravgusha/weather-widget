@@ -1,20 +1,26 @@
 <template>
   <div class="container">
-    <Header :locations="locations" /> <card-list :cards="cards" />
+    <Header :locations="locations" @toggle="toggleSettings" />
+    <settings :locations="locations" @add="addLocation" :isSettingsOpen="isSettingsOpen" />
+    <card-list :cards="cards" />
   </div>
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from "vue";
 import CardList from "./components/CardList/CardList.vue";
 import Header from "./components/Header/Header.vue";
-export default {
+import Settings from "./components/Settings/Settings.vue";
+export default defineComponent({
   components: {
     CardList,
     Header,
+    Settings,
   },
   data() {
     return {
-      locations: [],
+      isSettingsOpen: false,
+      locations: (Array as PropType<string[]>) || Array,
       cards: [
         {
           coord: {
@@ -118,14 +124,17 @@ export default {
     };
   },
   methods: {
-    addLocation() {
-      if (this.newLocation) {
-        this.locations?.push(this.newLocation);
-        this.newLocation = "";
+    toggleSettings() {
+      this.isSettingsOpen = !this.isSettingsOpen;
+    },
+    addLocation(location: string) {
+      console.log(location);
+      if (location) {
+        this.locations.push(location);
       }
     },
   },
-};
+});
 </script>
 
 <style></style>

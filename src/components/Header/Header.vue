@@ -1,27 +1,22 @@
 <template>
   <div class="header">
-    <button type="button" @click="isOpen = !isOpen" />
+    <button type="button" @click="toggleSettings" />
   </div>
-  <settings :locations="locations" :isOpen="isOpen" />
-  <!-- <div class="dropdown" :class="{ 'dropdown-after': isOpen }">Settings</div> -->
 </template>
 <script lang="ts">
-import Settings from "../Settings/Settings.vue";
-export default {
-  components: {
-    Settings,
-  },
+import { defineComponent } from "vue";
+export default defineComponent({
   props: {
-    locations: {
-      type: Array,
+    isSettingsOpen: {
+      type: Boolean,
     },
   },
-  data: () => {
-    return {
-      isOpen: false,
-    };
+  methods: {
+    toggleSettings() {
+      this.$emit("toggle");
+    },
   },
-};
+});
 </script>
 <style lang="scss">
 @import "./Header.scss";
