@@ -1,7 +1,10 @@
 <template>
   <div class="dropdown" :class="{ 'dropdown-after': isSettingsOpen }">
     <ul>
-      <li v-for="location in locations" :key="location.id">{{ location.name }}</li>
+      <li v-for="location in locations" :key="location.id">
+        {{ location.name }}
+        <p @click="deleteLocation(location.id)">X</p>
+      </li>
     </ul>
     <form @submit.prevent>
       <input type="text" placeholder="Add new location" v-model="newLocation" />
@@ -37,6 +40,9 @@ export default defineComponent({
         this.$emit("add", this.newLocation, id);
         this.newLocation = "";
       }
+    },
+    deleteLocation(id: number) {
+      this.$emit("delete", id);
     },
   },
 });

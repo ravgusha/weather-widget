@@ -1,7 +1,12 @@
 <template>
   <div class="container">
     <Header :locations="locations" @toggle="toggleSettings" />
-    <settings :locations="locations" @add="addLocation" :isSettingsOpen="isSettingsOpen" />
+    <settings
+      :locations="locations"
+      @add="addLocation"
+      @delete="deleteLocation"
+      :isSettingsOpen="isSettingsOpen"
+    />
     <card-list :cards="cards" :isSettingsOpen="isSettingsOpen" />
   </div>
 </template>
@@ -44,6 +49,9 @@ export default defineComponent({
         };
         this.locations.push(newLocation);
       }
+    },
+    deleteLocation(id: number) {
+      this.locations = this.locations.filter((location) => location.id !== id);
     },
     async getWeather(location: string) {
       this.cards = [];
