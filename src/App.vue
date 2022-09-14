@@ -7,10 +7,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent } from "vue";
 import CardList from "./components/CardList/CardList.vue";
 import Header from "./components/Header/Header.vue";
 import Settings from "./components/Settings/Settings.vue";
+
+interface ILocation {
+  name: string;
+  id: number;
+}
+
 export default defineComponent({
   components: {
     CardList,
@@ -20,118 +26,46 @@ export default defineComponent({
   data() {
     return {
       isSettingsOpen: false,
-      locations: (Array as PropType<string[]>) || Array,
-      cards: [
-        {
-          coord: {
-            lon: 10.99,
-            lat: 44.34,
-          },
-          weather: [
-            {
-              id: 501,
-              main: "Rain",
-              description: "moderate rain",
-              icon: "10d",
-            },
-          ],
-          base: "stations",
-          main: {
-            temp: 298.48,
-            feels_like: 298.74,
-            temp_min: 297.56,
-            temp_max: 300.05,
-            pressure: 1015,
-            humidity: 64,
-            sea_level: 1015,
-            grnd_level: 933,
-          },
-          visibility: 10000,
-          wind: {
-            speed: 0.62,
-            deg: 349,
-            gust: 1.18,
-          },
-          rain: {
-            "1h": 3.16,
-          },
-          clouds: {
-            all: 100,
-          },
-          dt: 1661870592,
-          sys: {
-            type: 2,
-            id: 2075663,
-            country: "IT",
-            sunrise: 1661834187,
-            sunset: 1661882248,
-          },
-          timezone: 7200,
-          id: 3163858,
-          name: "Zocca",
-          cod: 200,
-        },
-        {
-          coord: {
-            lon: 10.99,
-            lat: 44.34,
-          },
-          weather: [
-            {
-              id: 501,
-              main: "Rain",
-              description: "moderate rain",
-              icon: "13d",
-            },
-          ],
-          base: "stations",
-          main: {
-            temp: 298.48,
-            feels_like: 298.74,
-            temp_min: 297.56,
-            temp_max: 300.05,
-            pressure: 1015,
-            humidity: 64,
-            sea_level: 1015,
-            grnd_level: 933,
-          },
-          visibility: 10000,
-          wind: {
-            speed: 0.62,
-            deg: 349,
-            gust: 1.18,
-          },
-          rain: {
-            "1h": 3.16,
-          },
-          clouds: {
-            all: 100,
-          },
-          dt: 1661870592,
-          sys: {
-            type: 2,
-            id: 2075663,
-            country: "IT",
-            sunrise: 1661834187,
-            sunset: 1661882248,
-          },
-          timezone: 7200,
-          id: 3163850,
-          name: "Moscow",
-          cod: 200,
-        },
-      ],
+      locations: [
+        { name: "Moscow", id: 1 },
+        { name: "Rome", id: 2 },
+      ] as ILocation[],
+      cards: [],
     };
   },
   methods: {
     toggleSettings() {
       this.isSettingsOpen = !this.isSettingsOpen;
     },
-    addLocation(location: string) {
+    addLocation(location: string, id: number) {
       console.log(location);
       if (location) {
-        this.locations.push(location);
+        const newLocation = {
+          name: location,
+          id: id,
+        };
+        this.locations.push(newLocation);
       }
+    },
+    async fetchWeather(location: string) {
+      try {
+        await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${location}&lang=en&appid=88986004c8054ae5c4021fc0e275eb5f&units=metric`
+        ).then(async (response) => {
+          const res = await response.json();
+          this.cards.push(res);
+        });
+      } catch (e) {
+        console.log("Error");
+      }
+    },
+  },
+  mounted() {
+    this.locations.forEach((value) => this.fetchWeather(value.name));
+  },
+  watch: {
+    locations() {
+      this.locations.forEach((value) => this.fetchWeather(value.name));
     },
   },
 });
