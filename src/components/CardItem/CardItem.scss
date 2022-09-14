@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 25px;
+  padding: 17px;
   background-image: url(@/assets/day.webp);
   border-radius: 7%;
   margin-top: 25px;
@@ -36,7 +36,7 @@
       img {
         width: 25px;
         height: 25px;
-        margin-right: 10px;
+        margin-right: 5px;
         // filter: invert(100%);
       }
 

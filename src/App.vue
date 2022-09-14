@@ -27,8 +27,8 @@ export default defineComponent({
     return {
       isSettingsOpen: false,
       locations: [{ name: "Moscow", id: 1 }] as ILocation[],
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      cards: [] as Object[],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      cards: [] as any[],
     };
   },
   methods: {
