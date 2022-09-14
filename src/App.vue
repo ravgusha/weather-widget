@@ -2,7 +2,7 @@
   <div class="container">
     <Header :locations="locations" @toggle="toggleSettings" />
     <settings :locations="locations" @add="addLocation" :isSettingsOpen="isSettingsOpen" />
-    <card-list :cards="cards" />
+    <card-list :cards="cards" :isSettingsOpen="isSettingsOpen" />
   </div>
 </template>
 
@@ -26,11 +26,9 @@ export default defineComponent({
   data() {
     return {
       isSettingsOpen: false,
-      locations: [
-        { name: "Moscow", id: 1 },
-        { name: "Rome", id: 2 },
-      ] as ILocation[],
-      cards: [],
+      locations: [{ name: "Moscow", id: 1 }] as ILocation[],
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      cards: [] as Object[],
     };
   },
   methods: {
@@ -47,7 +45,8 @@ export default defineComponent({
         this.locations.push(newLocation);
       }
     },
-    async fetchWeather(location: string) {
+    async getWeather(location: string) {
+      this.cards = [];
       try {
         await fetch(
           `https://api.openweathermap.org/data/2.5/weather?q=${location}&lang=en&appid=88986004c8054ae5c4021fc0e275eb5f&units=metric`
@@ -60,12 +59,16 @@ export default defineComponent({
       }
     },
   },
-  mounted() {
-    this.locations.forEach((value) => this.fetchWeather(value.name));
+  created() {
+    this.locations.forEach((value) => this.getWeather(value.name));
   },
   watch: {
-    locations() {
-      this.locations.forEach((value) => this.fetchWeather(value.name));
+    locations: {
+      handler: function () {
+        console.log("watch");
+        this.locations.forEach((value) => this.getWeather(value.name));
+      },
+      deep: true,
     },
   },
 });
