@@ -22,6 +22,15 @@ interface ILocation {
   id: number;
 }
 
+// const successfulLookup = (position) => {
+//   const { latitude, longitude } = position.coords;
+//   fetch(
+//     `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}localityLanguage=en`
+//   )
+//     .then((response) => response.json())
+//     .then((response) => this.locations.push(response));
+// };
+
 export default defineComponent({
   components: {
     CardList,
@@ -50,7 +59,7 @@ export default defineComponent({
       }
     },
     deleteLocation(id: number) {
-      this.locations = this.locations.filter((location) => location.id !== id);
+      this.locations = this.locations.filter((location: { id: number }) => location.id !== id);
     },
     async getWeather(location: string) {
       await fetch(
@@ -65,23 +74,46 @@ export default defineComponent({
     async getAllWeathers() {
       if (!this.locations) return;
       this.cards.length = 0;
-      const promiseList = this.locations.map((value) => {
+      const promiseList = this.locations.map((value: { name: string }) => {
         return this.getWeather(value.name);
       });
 
       await Promise.all(promiseList);
-      this.cards.sort((a, b) => {
+      this.cards.sort((a: { name: string }, b: { name: string }) => {
         return (
-          this.locations.findIndex((p) => p.name.toLowerCase() === a.name.toLowerCase()) -
-          this.locations.findIndex((p) => p.name.toLowerCase() === b.name.toLowerCase())
+          this.locations.findIndex(
+            (p: { name: string }) => p.name.toLowerCase() === a.name.toLowerCase()
+          ) -
+          this.locations.findIndex(
+            (p: { name: string }) => p.name.toLowerCase() === b.name.toLowerCase()
+          )
         );
       });
       console.log(this.cards);
+    },
+
+    successfulLookup(position: { coords: { latitude: number; longitude: number } }) {
+      console.log(position);
+      const { latitude, longitude } = position.coords;
+      fetch(
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}localityLanguage=en`
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response.city);
+          this.locations.push({
+            name: response.city,
+            id: new Date().valueOf(),
+          });
+        });
     },
   },
   created() {
     console.log("created");
     this.locations = JSON.parse(localStorage.getItem("locations") || "[]");
+    if (!this.locations.length) {
+      window.navigator.geolocation.getCurrentPosition(this.successfulLookup, console.log);
+    }
   },
   watch: {
     locations: {
