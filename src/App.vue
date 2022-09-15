@@ -31,13 +31,13 @@ export default defineComponent({
   data() {
     return {
       isSettingsOpen: false,
-      locations: [{ name: "Moscow", id: 1 }] as ILocation[],
+      locations: [] as ILocation[],
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cards: [] as any[],
     };
   },
   methods: {
-    toggleSettings() {
+    async toggleSettings() {
       this.isSettingsOpen = !this.isSettingsOpen;
     },
     addLocation(location: string, id: number) {
@@ -53,28 +53,42 @@ export default defineComponent({
       this.locations = this.locations.filter((location) => location.id !== id);
     },
     async getWeather(location: string) {
-      // this.cards = [];
-      try {
-        await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?q=${location}&lang=en&appid=88986004c8054ae5c4021fc0e275eb5f&units=metric`
-        ).then(async (response) => {
-          const res = await response.json();
-          this.cards.push(res);
+      await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${location}&lang=en&appid=88986004c8054ae5c4021fc0e275eb5f&units=metric`
+      )
+        .then((response) => response.json())
+        .then((response) => this.cards.push(response))
+        .catch((e) => {
+          console.log(e);
         });
-      } catch (e) {
-        console.log("Error");
-      }
+    },
+    async getAllWeathers() {
+      if (!this.locations) return;
+      this.cards.length = 0;
+      const promiseList = this.locations.map((value) => {
+        return this.getWeather(value.name);
+      });
+
+      await Promise.all(promiseList);
+      this.cards.sort((a, b) => {
+        return (
+          this.locations.findIndex((p) => p.name.toLowerCase() === a.name.toLowerCase()) -
+          this.locations.findIndex((p) => p.name.toLowerCase() === b.name.toLowerCase())
+        );
+      });
+      console.log(this.cards);
     },
   },
   created() {
-    this.locations.forEach((value) => this.getWeather(value.name));
+    console.log("created");
+    this.locations = JSON.parse(localStorage.getItem("locations") || "[]");
   },
   watch: {
     locations: {
       handler: function () {
-        this.cards = [];
-        if (!this.locations) return;
-        this.locations.forEach((value) => this.getWeather(value.name));
+        console.log("change locations");
+        localStorage.locations = JSON.stringify(this.locations);
+        this.getAllWeathers();
       },
       deep: true,
     },

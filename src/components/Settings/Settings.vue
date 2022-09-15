@@ -1,13 +1,6 @@
 <template>
   <div class="dropdown" :class="{ 'dropdown-after': isSettingsOpen }">
-    <draggable
-      :list="locations"
-      group="cards"
-      @start="drag = true"
-      @end="drag = false"
-      tag="ul"
-      item-key="id"
-    >
+    <draggable :list="locations" group="cards" tag="ul" item-key="id">
       <template #item="{ element }">
         <li>
           {{ element.name }}
