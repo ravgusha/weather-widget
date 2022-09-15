@@ -1,11 +1,20 @@
 <template>
   <div class="dropdown" :class="{ 'dropdown-after': isSettingsOpen }">
-    <ul>
-      <li v-for="location in locations" :key="location.id">
-        {{ location.name }}
-        <p @click="deleteLocation(location.id)">X</p>
-      </li>
-    </ul>
+    <draggable
+      :list="locations"
+      group="cards"
+      @start="drag = true"
+      @end="drag = false"
+      tag="ul"
+      item-key="id"
+    >
+      <template #item="{ element }">
+        <li>
+          {{ element.name }}
+          <p @click="deleteLocation(element.id)">X</p>
+        </li>
+      </template>
+    </draggable>
     <form @submit.prevent>
       <input type="text" placeholder="Add new location" v-model="newLocation" />
       <button @click="addLocation">Add</button>
@@ -14,11 +23,14 @@
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
+import draggable from "vuedraggable";
+
 interface ILocation {
   name: string;
   id: number;
 }
 export default defineComponent({
+  components: { draggable },
   data() {
     return {
       newLocation: "",
@@ -34,7 +46,6 @@ export default defineComponent({
   },
   methods: {
     addLocation() {
-      console.log(location);
       if (this.newLocation) {
         const id = new Date().valueOf();
         this.$emit("add", this.newLocation, id);

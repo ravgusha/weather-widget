@@ -41,7 +41,6 @@ export default defineComponent({
       this.isSettingsOpen = !this.isSettingsOpen;
     },
     addLocation(location: string, id: number) {
-      console.log(location);
       if (location) {
         const newLocation = {
           name: location,
@@ -54,7 +53,7 @@ export default defineComponent({
       this.locations = this.locations.filter((location) => location.id !== id);
     },
     async getWeather(location: string) {
-      this.cards = [];
+      // this.cards = [];
       try {
         await fetch(
           `https://api.openweathermap.org/data/2.5/weather?q=${location}&lang=en&appid=88986004c8054ae5c4021fc0e275eb5f&units=metric`
@@ -73,7 +72,8 @@ export default defineComponent({
   watch: {
     locations: {
       handler: function () {
-        console.log("watch");
+        this.cards = [];
+        if (!this.locations) return;
         this.locations.forEach((value) => this.getWeather(value.name));
       },
       deep: true,
