@@ -49,12 +49,14 @@ export default defineComponent({
     async getWeather(location: string) {
       await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${location}&lang=en&appid=88986004c8054ae5c4021fc0e275eb5f&units=metric`
-      )
-        .then((response) => response.json())
-        .then((response) => this.cards.push(response))
-        .catch((e) => {
-          console.log(e);
-        });
+      ).then((response) => {
+        if (!response.ok) {
+          this.locations = this.locations.filter((item) => item.name !== location);
+          throw new Error("Error response");
+        } else {
+          response.json().then((response) => this.cards.push(response));
+        }
+      });
     },
     async getAllWeathers() {
       if (!this.locations) return;
@@ -108,4 +110,12 @@ export default defineComponent({
   },
 });
 </script>
-<style lang=""></style>
+<style lang="scss">
+.container {
+  width: 300px;
+  height: 720px;
+  margin: 0 auto;
+  overflow: auto;
+  position: relative;
+}
+</style>
