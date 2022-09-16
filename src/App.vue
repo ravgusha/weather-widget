@@ -22,14 +22,55 @@ interface ILocation {
   id: number;
 }
 
-// const successfulLookup = (position) => {
-//   const { latitude, longitude } = position.coords;
-//   fetch(
-//     `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}localityLanguage=en`
-//   )
-//     .then((response) => response.json())
-//     .then((response) => this.locations.push(response));
-// };
+interface ICard {
+  coord: {
+    lon: number;
+    lat: number;
+  };
+  weather: [
+    {
+      id: number;
+      main: string;
+      description: string;
+      icon: string;
+    }
+  ];
+  base: string;
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+    humidity: number;
+    sea_level: number;
+    grnd_level: number;
+  };
+  visibility: number;
+  wind: {
+    speed: number;
+    deg: number;
+    gust: number;
+  };
+  rain: {
+    "1h": string;
+  };
+  clouds: {
+    all: number;
+  };
+  dt: number;
+  sys: {
+    type: number;
+    id: number;
+    country: string;
+    sunrise: number;
+    sunset: number;
+  };
+  timezone: number;
+  id: number;
+  name: string;
+  cod: number;
+}
 
 export default defineComponent({
   components: {
@@ -41,8 +82,7 @@ export default defineComponent({
     return {
       isSettingsOpen: false,
       locations: [] as ILocation[],
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      cards: [] as any[],
+      cards: [] as ICard[],
     };
   },
   methods: {
@@ -77,8 +117,10 @@ export default defineComponent({
       const promiseList = this.locations.map((value: { name: string }) => {
         return this.getWeather(value.name);
       });
-
       await Promise.all(promiseList);
+      this.sortCards();
+    },
+    sortCards() {
       this.cards.sort((a: { name: string }, b: { name: string }) => {
         return (
           this.locations.findIndex(
@@ -89,18 +131,14 @@ export default defineComponent({
           )
         );
       });
-      console.log(this.cards);
     },
-
     successfulLookup(position: { coords: { latitude: number; longitude: number } }) {
-      console.log(position);
       const { latitude, longitude } = position.coords;
       fetch(
         `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}localityLanguage=en`
       )
         .then((response) => response.json())
         .then((response) => {
-          console.log(response.city);
           this.locations.push({
             name: response.city,
             id: new Date().valueOf(),
@@ -109,7 +147,6 @@ export default defineComponent({
     },
   },
   created() {
-    console.log("created");
     this.locations = JSON.parse(localStorage.getItem("locations") || "[]");
     if (!this.locations.length) {
       window.navigator.geolocation.getCurrentPosition(this.successfulLookup, console.log);
@@ -118,7 +155,6 @@ export default defineComponent({
   watch: {
     locations: {
       handler: function () {
-        console.log("change locations");
         localStorage.locations = JSON.stringify(this.locations);
         this.getAllWeathers();
       },
