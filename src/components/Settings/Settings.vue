@@ -15,13 +15,10 @@
   </div>
 </template>
 <script lang="ts">
+import { ILocation } from "@/src/types/types";
 import { defineComponent, PropType } from "vue";
 import draggable from "vuedraggable";
 
-interface ILocation {
-  name: string;
-  id: number;
-}
 export default defineComponent({
   components: { draggable },
   data() {
