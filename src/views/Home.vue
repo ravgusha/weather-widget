@@ -7,7 +7,8 @@
       @delete="deleteLocation"
       :isSettingsOpen="isSettingsOpen"
     />
-    <card-list :cards="cards" :isSettingsOpen="isSettingsOpen" />
+    <card-list v-if="cards.length > 0" :cards="cards" :isSettingsOpen="isSettingsOpen" />
+    <empty-state v-else />
   </div>
 </template>
 <script lang="ts">
@@ -15,6 +16,7 @@ import { defineComponent } from "vue";
 import CardList from "../components/CardList/CardList.vue";
 import Header from "../components/Header/Header.vue";
 import Settings from "../components/Settings/Settings.vue";
+import EmptyState from "../components/EmptyState/EmptyState.vue";
 import { ILocation, ICard } from "../types/types";
 
 export default defineComponent({
@@ -22,6 +24,7 @@ export default defineComponent({
     CardList,
     Header,
     Settings,
+    EmptyState,
   },
   data() {
     return {
