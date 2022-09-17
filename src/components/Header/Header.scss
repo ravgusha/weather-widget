@@ -1,20 +1,20 @@
 .header {
-  text-align: end;
-  background-color: #ec6e4c;
-  position: absolute;
   width: inherit;
   height: 43px;
   z-index: 1;
+  position: absolute;
+  text-align: end;
+  background-color: #ec6e4c;
 
   button {
-    background-image: url("@/assets/settings.svg");
-    margin-top: 3px;
-    margin-left: auto;
     width: 35px;
     height: 35px;
-    background-color: transparent;
+    margin-top: 3px;
+    margin-left: auto;
     border: none;
+    background-color: transparent;
     background-size: cover;
+    background-image: url("@/assets/settings.svg");
     cursor: pointer;
   }
 }
