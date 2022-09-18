@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <Header :locations="locations" @toggle="toggleSettings" />
-    <settings
+    <Settings
       :locations="locations"
       @add="addLocation"
       @delete="deleteLocation"
       :isSettingsOpen="isSettingsOpen"
     />
-    <card-list v-if="cards.length > 0" :cards="cards" :isSettingsOpen="isSettingsOpen" />
-    <empty-state v-else />
+    <CardList v-if="cards.length" :cards="cards" :isSettingsOpen="isSettingsOpen" />
+    <EmptyState v-else />
   </div>
 </template>
 <script lang="ts">
@@ -49,8 +49,8 @@ export default defineComponent({
     deleteLocation(id: number) {
       this.locations = this.locations.filter((location: { id: number }) => location.id !== id);
     },
-    async getWeather(location: string) {
-      await fetch(
+    getWeather(location: string) {
+      fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${location}&lang=en&appid=88986004c8054ae5c4021fc0e275eb5f&units=metric`
       ).then((response) => {
         if (!response.ok) {
@@ -62,7 +62,7 @@ export default defineComponent({
       });
     },
     async getAllWeathers() {
-      if (!this.locations) return;
+      if (!this.locations.length) return;
       this.cards.length = 0;
       const promiseList = this.locations.map((value: { name: string }) => {
         return this.getWeather(value.name);
@@ -99,7 +99,7 @@ export default defineComponent({
   created() {
     this.locations = JSON.parse(localStorage.getItem("locations") || "[]");
     if (!this.locations.length) {
-      window.navigator.geolocation.getCurrentPosition(this.getCity, console.log);
+      window.navigator.geolocation.getCurrentPosition(this.getCity);
     }
   },
   watch: {

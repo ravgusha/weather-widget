@@ -1,6 +1,6 @@
 <template>
   <div class="card-list" v-if="isSettingsOpen === false">
-    <card-item class="card" v-for="card in cards" :card="card" :key="card.id" />
+    <CardItem class="card" v-for="card in cards" :card="card" :key="card.id" />
   </div>
 </template>
 
