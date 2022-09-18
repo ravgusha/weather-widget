@@ -1,7 +1,8 @@
-<template><div>Weather</div></template>
+<template><Home /></template>
 
 <script lang="ts">
-export default { name: "App" };
+import Home from "./views/Home.vue";
+export default { components: { Home } };
 </script>
 
 <style></style>

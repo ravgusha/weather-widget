@@ -9,10 +9,13 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "dewpoint": "^1.0.0",
     "register-service-worker": "^1.7.2",
     "vue": "^3.2.13",
     "vue-class-component": "^8.0.0-0",
+    "vue-custom-element": "^3.3.0",
     "vue-router": "^4.0.3",
+    "vuedraggable": "^4.1.0",
     "vuex": "^4.0.0"
   },
   "devDependencies": {
@@ -49,9 +52,16 @@
     "parserOptions": {
       "ecmaVersion": 2020
     },
-    "rules": 
-      {"prettier/prettier": ["error", {"endOfLine": "auto"}]}
-    
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ],
+      "@typescript-eslint/ban-ts-comment": "off",
+      "vue/multi-word-component-names": "off"
+    }
   },
   "browserslist": [
     "> 1%",
