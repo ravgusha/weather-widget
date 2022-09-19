@@ -15,8 +15,10 @@
     "vue-class-component": "^8.0.0-0",
     "vue-custom-element": "^3.3.0",
     "vue-router": "^4.0.3",
+    "vue3-webcomponent-wrapper": "^0.1.4",
     "vuedraggable": "^4.1.0",
-    "vuex": "^4.0.0"
+    "vuex": "^4.0.0",
+    "webpack": "^5.74.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.4.0",
