@@ -14,7 +14,7 @@
       <p>{{ describeWindSpeed(card.wind.speed) }}.</p>
     </div>
     <div class="card__other">
-      <div>
+      <div v-tooltip="'Wind speed and direction'">
         <svg
           version="1.1"
           id="Capa_1"
@@ -54,7 +54,7 @@
         </svg>
         <p>{{ card.wind.speed }} m/s, {{ getWindDirection(card.wind.deg) }}</p>
       </div>
-      <div>
+      <div v-tooltip="'Atmospheric pressure'">
         <svg
           version="1.1"
           id="Layer_1"
@@ -90,7 +90,7 @@
         </svg>
         <p>{{ card.main.pressure }} hPa</p>
       </div>
-      <div>
+      <div v-tooltip="'Visibility'">
         <svg
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +118,7 @@
         </svg>
         <p>{{ card.visibility / 1000 }} km</p>
       </div>
-      <div>
+      <div v-tooltip="'Humidity'">
         <svg
           version="1.1"
           id="Layer_1"
@@ -167,7 +167,7 @@
         </svg>
         <p>{{ card.main.humidity }} % &nbsp; &nbsp; &nbsp;&nbsp;</p>
       </div>
-      <div>
+      <div v-tooltip="'Dew point'">
         <svg
           version="1.1"
           id="Layer_1"
