@@ -9,6 +9,7 @@
       </template>
     </draggable>
     <form @submit.prevent>
+      <p>{{ error }}</p>
       <input type="text" placeholder="Add new location" v-model="newLocation" />
       <button @click="addLocation">Add</button>
     </form>
@@ -32,6 +33,9 @@ export default defineComponent({
     },
     locations: {
       type: Array as PropType<ILocation[]>,
+    },
+    error: {
+      type: String,
     },
   },
   methods: {

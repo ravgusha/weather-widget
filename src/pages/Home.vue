@@ -3,12 +3,13 @@
     <Header :locations="locations" @toggle="toggleSettings" />
     <Settings
       :locations="locations"
+      :error="error"
       @add="addLocation"
       @delete="deleteLocation"
       :isSettingsOpen="isSettingsOpen"
     />
     <CardList v-if="cards.length" :cards="cards" :isSettingsOpen="isSettingsOpen" />
-    <EmptyState v-else />
+    <EmptyState v-else :isAccessDenied="isAccessDenied" />
   </div>
 </template>
 <script lang="ts">
@@ -31,6 +32,8 @@ export default defineComponent({
       isSettingsOpen: false,
       locations: [] as ILocation[],
       cards: [] as ICard[],
+      isAccessDenied: false,
+      error: "",
     };
   },
   methods: {
@@ -38,6 +41,14 @@ export default defineComponent({
       this.isSettingsOpen = !this.isSettingsOpen;
     },
     addLocation(location: string, id: number) {
+      if (this.locations.find((o) => o.name.toLowerCase() === location.toLowerCase())) {
+        this.error = "This location is already added";
+        // Скрыть ошибку через 5 секунд
+        setTimeout(() => {
+          this.error = "";
+        }, 5000);
+        return;
+      }
       if (location) {
         const newLocation = {
           name: location,
@@ -55,15 +66,19 @@ export default defineComponent({
       ).then((response) => {
         if (!response.ok) {
           this.locations = this.locations.filter((item) => item.name !== location);
-          throw new Error("Error response");
+          this.error = "This location was not found";
+          // Скрыть ошибку через 5 секунд
+          setTimeout(() => {
+            this.error = "";
+          }, 5000);
         } else {
           response.json().then((response) => this.cards.push(response));
         }
       });
     },
     async getAllWeathers() {
-      if (!this.locations.length) return;
       this.cards.length = 0;
+      if (!this.locations.length) return;
       const promiseList = this.locations.map((value: { name: string }) => {
         return this.getWeather(value.name);
       });
@@ -99,7 +114,9 @@ export default defineComponent({
   created() {
     this.locations = JSON.parse(localStorage.getItem("locations") || "[]");
     if (!this.locations.length) {
-      window.navigator.geolocation.getCurrentPosition(this.getCity);
+      window.navigator.geolocation.getCurrentPosition(this.getCity, () => {
+        this.isAccessDenied = true;
+      });
     }
   },
   watch: {

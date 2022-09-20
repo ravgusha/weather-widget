@@ -38,6 +38,11 @@
   }
 
   form {
+    p {
+      height: 19px;
+      color: red;
+    }
+    
     input {
       font-size: 14px;
       margin: 0 0 15px;
@@ -66,4 +71,5 @@
   height: 100%;
   padding-top: 43px;
   transition: height 0.2s ease;
+  border-radius: 10px;
 }
