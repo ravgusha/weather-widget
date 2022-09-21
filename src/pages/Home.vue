@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <loading v-model:active="isLoading" />
     <Header :locations="locations" @toggle="toggleSettings" />
     <Settings
       :locations="locations"
@@ -18,6 +19,8 @@ import CardList from "../components/CardList/CardList.vue";
 import Header from "../components/Header/Header.vue";
 import Settings from "../components/Settings/Settings.vue";
 import EmptyState from "../components/EmptyState/EmptyState.vue";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 import { ILocation, ICard } from "../types/types";
 
 export default defineComponent({
@@ -26,10 +29,12 @@ export default defineComponent({
     Header,
     Settings,
     EmptyState,
+    Loading,
   },
   data() {
     return {
       isSettingsOpen: false,
+      isLoading: false,
       locations: [] as ILocation[],
       cards: [] as ICard[],
       isAccessDenied: false,
@@ -77,6 +82,7 @@ export default defineComponent({
       });
     },
     async getAllWeathers() {
+      this.isLoading = true;
       this.cards.length = 0;
       if (!this.locations.length) return;
       const promiseList = this.locations.map((value: { name: string }) => {
@@ -84,6 +90,7 @@ export default defineComponent({
       });
       await Promise.all(promiseList);
       this.sortCards();
+      this.isLoading = false;
     },
     sortCards() {
       this.cards.sort((a: { name: string }, b: { name: string }) => {
