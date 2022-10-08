@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <loading v-model:active="isLoading" />
+    <Spinner v-show="isLoading" />
     <Header :locations="locations" @toggle="toggleSettings" />
     <Settings
       :locations="locations"
@@ -15,12 +15,12 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import axios from "axios";
 import CardList from "../components/CardList/CardList.vue";
 import Header from "../components/Header/Header.vue";
 import Settings from "../components/Settings/Settings.vue";
 import EmptyState from "../components/EmptyState/EmptyState.vue";
-import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
+import Spinner from "../components/Spinner/Spinner.vue";
 import { ILocation, ICard } from "../types/types";
 
 export default defineComponent({
@@ -29,7 +29,7 @@ export default defineComponent({
     Header,
     Settings,
     EmptyState,
-    Loading,
+    Spinner,
   },
   data() {
     return {
@@ -65,21 +65,24 @@ export default defineComponent({
     deleteLocation(id: number) {
       this.locations = this.locations.filter((location: { id: number }) => location.id !== id);
     },
-    getWeather(location: string) {
-      fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${location}&lang=en&appid=88986004c8054ae5c4021fc0e275eb5f&units=metric`
-      ).then((response) => {
-        if (!response.ok) {
+    async getWeather(location: string) {
+      try {
+        await axios
+          .get(
+            `https://api.openweathermap.org/data/2.5/weather?q=${location}&lang=en&appid=88986004c8054ae5c4021fc0e275eb5f&units=metric`
+          )
+          .then((response) => this.cards.push(response.data));
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
           this.locations = this.locations.filter((item) => item.name !== location);
-          this.error = "This location was not found";
+          this.error = error.response?.data?.message;
           // Скрыть ошибку через 5 секунд
           setTimeout(() => {
             this.error = "";
           }, 5000);
-        } else {
-          response.json().then((response) => this.cards.push(response));
+          console.log(error.response?.data?.message);
         }
-      });
+      }
     },
     async getAllWeathers() {
       this.isLoading = true;
@@ -106,13 +109,13 @@ export default defineComponent({
     },
     getCity(position: { coords: { latitude: number; longitude: number } }) {
       const { latitude, longitude } = position.coords;
-      fetch(
-        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}localityLanguage=en`
-      )
-        .then((response) => response.json())
+      axios
+        .get(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}localityLanguage=en`
+        )
         .then((response) => {
           this.locations.push({
-            name: response.city,
+            name: response.data.city,
             id: new Date().valueOf(),
           });
         });
