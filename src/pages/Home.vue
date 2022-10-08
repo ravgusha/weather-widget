@@ -87,7 +87,10 @@ export default defineComponent({
     async getAllWeathers() {
       this.isLoading = true;
       this.cards.length = 0;
-      if (!this.locations.length) return;
+      if (!this.locations.length) {
+        this.isLoading = false;
+        return;
+      }
       const promiseList = this.locations.map((value: { name: string }) => {
         return this.getWeather(value.name);
       });
