@@ -9,9 +9,11 @@
       </template>
     </draggable>
     <form @submit.prevent>
-      <p>{{ error }}</p>
       <input type="text" placeholder="Add new location" v-model="newLocation" />
       <button @click="addLocation">Add</button>
+      <transition name="fade">
+        <div v-if="error">{{ error }}</div>
+      </transition>
     </form>
   </div>
 </template>

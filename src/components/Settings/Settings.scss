@@ -39,10 +39,28 @@
 
   form {
     white-space: nowrap;
-    
-    p {
-      height: 19px;
-      color: red;
+
+    div {
+      padding: 5px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background-color: #48484a;
+      border-color: #48484a;
+      // color: #8a6d3b;
+      position: relative;
+      font-size: 14px;
+
+      &::after {
+        content: " ";
+        position: absolute;
+        bottom: 100%;
+        left: 6%;
+        margin-left: -5px;
+        border-width: 8px;
+        border-style: solid;
+        border-color: transparent transparent #48484a transparent;
+      }
     }
 
     input {
@@ -74,6 +92,15 @@
         box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
       }
     }
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 1s;
+  }
+  
+  .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+    opacity: 0;
   }
 }
 

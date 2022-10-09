@@ -165,7 +165,7 @@
             </g>
           </g>
         </svg>
-        <p>{{ card.main.humidity }} % &nbsp; &nbsp; &nbsp;&nbsp;</p>
+        <p>{{ card.main.humidity }} %</p>
       </div>
       <div v-tooltip="'Dew point'">
         <svg
@@ -263,7 +263,7 @@
             </g>
           </g>
         </svg>
-        <p>Dew point: &nbsp;</p>
+        <p>&nbsp;</p>
         <p>
           {{ getDewPoint(card.main.sea_level, card.main.temp, card.main.humidity) }}
           &#8451;
