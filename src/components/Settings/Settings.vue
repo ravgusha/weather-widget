@@ -11,6 +11,9 @@
     <form @submit.prevent>
       <input type="text" placeholder="Add new location" v-model="newLocation" />
       <button @click="addLocation">Add</button>
+      <transition name="fade">
+        <div v-if="error">{{ error }}</div>
+      </transition>
     </form>
   </div>
 </template>
@@ -32,6 +35,9 @@ export default defineComponent({
     },
     locations: {
       type: Array as PropType<ILocation[]>,
+    },
+    error: {
+      type: String,
     },
   },
   methods: {

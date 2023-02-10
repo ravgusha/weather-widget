@@ -38,6 +38,31 @@
   }
 
   form {
+    white-space: nowrap;
+
+    div {
+      padding: 5px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background-color: #48484a;
+      border-color: #48484a;
+      // color: #8a6d3b;
+      position: relative;
+      font-size: 14px;
+
+      &::after {
+        content: " ";
+        position: absolute;
+        bottom: 100%;
+        left: 6%;
+        margin-left: -5px;
+        border-width: 8px;
+        border-style: solid;
+        border-color: transparent transparent #48484a transparent;
+      }
+    }
+
     input {
       font-size: 14px;
       margin: 0 0 15px;
@@ -46,9 +71,11 @@
       border: 0;
       border-radius: 5px;
       box-sizing: border-box;
+      width: fit-content;
     }
 
     button {
+      width: fit-content;
       font-size: 14px;
       padding: 12px;
       margin-left: 4px;
@@ -58,7 +85,22 @@
       border: 0;
       border-radius: 5px;
       background-color: #fbbf5d;
+      cursor: pointer;
+
+      &:active {
+        transform: scale(0.98);
+        box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+      }
     }
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 1s;
+  }
+  
+  .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+    opacity: 0;
   }
 }
 
@@ -66,4 +108,5 @@
   height: 100%;
   padding-top: 43px;
   transition: height 0.2s ease;
+  border-radius: 10px;
 }
